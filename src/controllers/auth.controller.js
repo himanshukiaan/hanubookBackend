@@ -41,3 +41,14 @@ exports.login = async (req, res, next) => {
     res.json({ user: { id: user._id, name: user.name, email: user.email }, token });
   } catch (err) { next(err); }
 };
+
+// controllers/auth.controller.js
+exports.logout = async (req, res, next) => {
+  try {
+    // Since JWT is stateless, logout just means the client deletes the token.
+    // You can still instruct the client to remove the token from storage.
+    res.json({ message: 'Logged out successfully. Please remove the token from client storage.' });
+  } catch (err) {
+    next(err);
+  }
+};
