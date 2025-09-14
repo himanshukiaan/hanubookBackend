@@ -17,7 +17,7 @@ const app = express();
 connectDB();
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:4000",
     credentials: true, // agar cookies ya auth headers bhejna hai to
   })
 );
