@@ -2,11 +2,13 @@ const Worker = require('../models/Worker');
 
 exports.createWorker = async (req, res, next) => {
   try {
-    const { name, phone, dailySalary, joiningDate } = req.body;
+    const { name, phone, age, designation, dailySalary, joiningDate } = req.body;
     const worker = await Worker.create({
       user: req.user._id,
       name,
       phone,
+      age,           // 👈 Added
+      designation,   // 👈 Added
       dailySalary,
       joiningDate
     });

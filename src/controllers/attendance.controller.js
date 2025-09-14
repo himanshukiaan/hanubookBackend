@@ -13,7 +13,7 @@ exports.createAttendance = async (req, res, next) => {
     if (!salaryType) return res.status(404).json({ message: 'Salary type not found' });
 
     const attDate = new Date(date);
-    attDate.setHours(0,0,0,0);
+    attDate.setHours(0, 0, 0, 0);
 
     const calculatedSalary = Number((worker.dailySalary * salaryType.multiplier).toFixed(2));
 
@@ -52,7 +52,7 @@ exports.bulkCreate = async (req, res, next) => {
         continue;
       }
       const attDate = new Date(e.date);
-      attDate.setHours(0,0,0,0);
+      attDate.setHours(0, 0, 0, 0);
       const calculatedSalary = Number((worker.dailySalary * salaryType.multiplier).toFixed(2));
       try {
         const created = await Attendance.create({
@@ -78,7 +78,7 @@ exports.bulkCreate = async (req, res, next) => {
 exports.getByWorkerAndMonth = async (req, res, next) => {
   try {
     const { workerId } = req.params;
-    const { month, year } = req.query;
+    const { month, year } = req.body;
     const start = new Date(year, month - 1, 1);
     const end = new Date(year, month, 1);
     const data = await Attendance.find({
