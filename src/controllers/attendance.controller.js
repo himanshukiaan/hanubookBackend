@@ -2,10 +2,25 @@ const Attendance = require('../models/Attendance');
 const Worker = require('../models/Worker');
 const SalaryType = require('../models/SalaryType');
 
+
+exports.getAllAttendance = async (req, res, next) => {
+  try {
+    const data = await Attendance.find({ user: req.user._id })
+      .populate('worker')
+      .populate('salaryType')
+      .sort({ date: -1 }); // latest first
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 exports.createAttendance = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { workerId, date, salaryTypeId, remarks } = req.body;
+
     const worker = await Worker.findOne({ _id: workerId, user: userId });
     if (!worker) return res.status(404).json({ message: 'Worker not found' });
 
@@ -28,7 +43,8 @@ exports.createAttendance = async (req, res, next) => {
       remarks
     });
 
-    res.json(attendance);
+    const populated = await attendance.populate('salaryType');
+    res.json(populated);
   } catch (err) {
     if (err.code === 11000) {
       return res.status(400).json({ message: 'Attendance for this worker & date already exists' });
@@ -65,7 +81,8 @@ exports.bulkCreate = async (req, res, next) => {
           calculatedSalary,
           remarks: e.remarks
         });
-        results.push({ entry: e, created });
+        const populated = await created.populate('salaryType');
+        results.push({ entry: e, created: populated });
       } catch (err) {
         results.push({ entry: e, error: err.message });
       }
@@ -78,14 +95,16 @@ exports.bulkCreate = async (req, res, next) => {
 exports.getByWorkerAndMonth = async (req, res, next) => {
   try {
     const { workerId } = req.params;
-    const { month, year } = req.body;
+    const { month, year } = req.query;
     const start = new Date(year, month - 1, 1);
     const end = new Date(year, month, 1);
+
     const data = await Attendance.find({
       user: req.user._id,
       worker: workerId,
       date: { $gte: start, $lt: end }
     }).populate('salaryType');
+
     res.json(data);
   } catch (err) { next(err); }
 };
