@@ -15,13 +15,8 @@ const scheduleJob = require('./jobs/monthlySummary.job');
 
 const app = express();
 connectDB();
-app.use(
-  cors({
-    origin: "http://localhost:4000",
-    credentials: true, // agar cookies ya auth headers bhejna hai to
-  })
-);
-// app.use(cors());
+
+app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
