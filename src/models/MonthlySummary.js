@@ -13,6 +13,6 @@ const MonthlySummarySchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-MonthlySummarySchema.index({ user:1, worker:1, month:1, year:1 }, { unique: true });
+MonthlySummarySchema.index({ user: 1, worker: 1, month: 1, year: 1 }, { unique: true });
 
 module.exports = mongoose.model('MonthlySummary', MonthlySummarySchema);
