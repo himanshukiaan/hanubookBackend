@@ -7,6 +7,7 @@ router.post('/', authenticate, workerCtrl.createWorker);
 router.get('/', authenticate, workerCtrl.getAll);
 router.get('/:id', authenticate, workerCtrl.getById);
 router.put('/:id', authenticate, workerCtrl.update);
+router.patch('/:id/inactivate', authenticate, workerCtrl.inactivate);
 router.delete('/:id', authenticate, workerCtrl.remove);
 
 module.exports = router;
