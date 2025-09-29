@@ -93,10 +93,29 @@
 
 const Worker = require('../models/Worker');
 
-// ✅ Create Worker (default active)
+// // ✅ Create Worker (default active)
+// exports.createWorker = async (req, res, next) => {
+//   try {
+//     const { name, phone, age, designation, dailySalary, joiningDate } = req.body;
+//     const worker = await Worker.create({
+//       user: req.user._id,
+//       name,
+//       phone,
+//       age,
+//       designation,
+//       dailySalary,
+//       joiningDate,
+//       status: "active"
+//     });
+//     res.json(worker);
+//   } catch (err) { next(err); }
+// };
+
+// ✅ Create Worker (default active, auto set joiningDate)
 exports.createWorker = async (req, res, next) => {
   try {
-    const { name, phone, age, designation, dailySalary, joiningDate } = req.body;
+    const { name, phone, age, designation, dailySalary } = req.body;
+
     const worker = await Worker.create({
       user: req.user._id,
       name,
@@ -104,12 +123,16 @@ exports.createWorker = async (req, res, next) => {
       age,
       designation,
       dailySalary,
-      joiningDate,
+      joiningDate: new Date(), // ⬅️ auto set to current date
       status: "active"
     });
+
     res.json(worker);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
+
 
 // ✅ Get all ACTIVE workers
 exports.getAll = async (req, res, next) => {
